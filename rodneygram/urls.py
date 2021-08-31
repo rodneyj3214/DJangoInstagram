@@ -1,14 +1,11 @@
 """"""
 from django.contrib import admin
-from django.http import HttpResponse
 from django.urls import path
-
-
-def hello_word(request):
-    return HttpResponse('Hello, world')
+from rodneygram import views
 
 
 urlpatterns = [
-    path('hello-world/', hello_word),
+    path('hello-world/', views.hello_word),
+    path('hi/', views.hi),
     path('admin/', admin.site.urls),
 ]
