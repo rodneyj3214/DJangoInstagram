@@ -9,6 +9,7 @@ def hello_word(request):
 
 
 def hi(request):
-    print(request)
-    import pdb; pdb.set_trace()
-    return HttpResponse('Hi')
+    numbers = request.GET['numbers']
+
+    # import pdb; pdb.set_trace()
+    return HttpResponse(str(numbers))
