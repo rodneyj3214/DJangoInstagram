@@ -1,6 +1,7 @@
 # Create your views here.
 from datetime import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 posts = [
@@ -33,7 +34,7 @@ posts = [
     }
 ]
 
-
+@login_required
 def list_post(request):
 
     # return HttpResponse('<br>'.join(contact))
