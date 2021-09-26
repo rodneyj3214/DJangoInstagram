@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 from django.shortcuts import render, redirect
 
+from users.forms import ProfileForm
 from users.models import Profile
 
 
@@ -26,18 +27,34 @@ def login_view(request):
 
 
 def update_profile(request):
-    """Login view."""
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return redirect('feed')
-        else:
-            return render(request, 'users/login.html', {'error': 'Invalid username and password'})
+    """Update a user's profile view."""
+    profile = request.user.profile
 
-    return render(request, 'users/update_profile.html')
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            data = form.cleaned_data
+
+            profile.website = data['website']
+            profile.phone_number = data['phone_number']
+            profile.biography = data['biography']
+            profile.picture = data['picture']
+            profile.save()
+
+            return redirect('update_profile')
+
+    else:
+        form = ProfileForm()
+
+    return render(
+        request=request,
+        template_name='users/update_profile.html',
+        context={
+            'profile': profile,
+            'user': request.user,
+            'form': form
+        }
+    )
 
 
 @login_required
